@@ -131,7 +131,7 @@ namespace CloudinaryMigration
             }
         }
 
-        public Int64 getRowID(String inputfoldername,String cldfoldername,String type)
+        public Int64 getRowID(String inputfoldername,String cldfoldername,String type,String filename="")
         {
             try
             {
@@ -142,15 +142,23 @@ namespace CloudinaryMigration
                     cmdSelect = new SQLiteCommand(
                             "SELECT max(rowid) rowid FROM app_log_dtls WHERE inputfoldername=@inputfoldername and cldfoldername = @cldfoldername ", sqlite_conn);
                 }
-                else
+                else if (type == "max")
                 {
                     cmdSelect = new SQLiteCommand(
                             "SELECT min(rowid) rowid FROM app_log_dtls WHERE inputfoldername=@inputfoldername and cldfoldername = @cldfoldername ", sqlite_conn);
                 }
+                else if (type == "count")
+                {
+                    cmdSelect = new SQLiteCommand(
+                            "SELECT count(*) FROM app_log_dtls WHERE inputfoldername=@inputfoldername and cldfoldername = @cldfoldername and substr(filename,instr(filename,'" + inputfoldername +"'))=@filename", sqlite_conn);
+                }
+
 
                 cmdSelect.Parameters.AddWithValue("@inputfoldername", inputfoldername);
                 cmdSelect.Parameters.AddWithValue("@cldfoldername", cldfoldername);
-
+                if (type == "count") {
+                    cmdSelect.Parameters.AddWithValue("@filename", filename.Substring(filename.IndexOf(inputfoldername)));
+                }
                 App_log_dtls app_log_dtls = new App_log_dtls();
                 Int64 maxRowid = 0;
                 if (cmdSelect.ExecuteScalar().ToString().Trim().Length > 0 && Int64.Parse(cmdSelect.ExecuteScalar().ToString()) > 0)
@@ -165,6 +173,8 @@ namespace CloudinaryMigration
                 return 0;
             }
         }
+
+
 
         public void updateRowIDStatus(Int64 rowid,int isProcessed, int isError, String errorDesc)
         {

@@ -8,7 +8,7 @@
     <ProjectGuid>{39198032-09E5-4422-A7FC-11379F4D22BB}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>CloudinaryMigration</RootNamespace>
-    <AssemblyName>CloudinaryMigration</AssemblyName>
+    <AssemblyName>CloudinaryMigrationApp</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
